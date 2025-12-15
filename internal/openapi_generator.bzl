@@ -118,9 +118,9 @@ def _impl(ctx):
 
     srcs = declared_dir.path
 
-    return DefaultInfo(files = depset([
-        declared_dir,
-    ]))
+    return DefaultInfo(
+        default_runfiles = ctx.runfiles(DirectoryExpander.expand(declared_dir), collect_default = True),
+    )
 
 # taken from rules_scala
 def _collect_jars(targets):
