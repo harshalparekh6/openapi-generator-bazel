@@ -119,7 +119,7 @@ def _impl(ctx):
     srcs = declared_dir.path
 
     return DefaultInfo(
-        default_runfiles = ctx.runfiles(DirectoryExpander.expand(declared_dir), collect_default = True),
+        files = DirectoryExpander.expand(declared_dir),
     )
 
 # taken from rules_scala
