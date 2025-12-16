@@ -118,9 +118,22 @@ def _impl(ctx):
 
     srcs = declared_dir.path
 
-    return DefaultInfo(
-        files = DirectoryExpander.expand(declared_dir),
+    # Use expand_directories to get individual files
+    args = ctx.actions.args()
+    args.add_all([declared_dir], expand_directories = True)
+    
+    # This will pass all individual file paths to the action
+    output = ctx.actions.declare_file(ctx.attr.name + ".txt")
+    ctx.actions.run_shell(
+        inputs = [declared_dir],
+        outputs = [output],
+        command = "echo $@ > " + output.path,
+        arguments = [args],
     )
+
+    return DefaultInfo(files = depset([
+        declared_dir,
+    ]))
 
 # taken from rules_scala
 def _collect_jars(targets):
